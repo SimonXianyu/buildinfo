@@ -1,0 +1,17 @@
+.DS_Store
+
+.classpath
+.project
+.settings/
+logs/
+*.log
+*.log.*
+
+target
+
+# intellij related ignores
+.idea
+*.iml
+
+# ignore project local
+*-local.properties
