@@ -1,0 +1,66 @@
+# Summary
+
+A simple tool to collect build information in maven build environment.
+
+## Usage
+1. Add maven build plugin in pom.xml:
+
+[source,xml]
+----
+    <build>
+        <plugins>
+          <plugin>
+            <groupId>simon.xianyu</groupId>
+            <artifactId>buildinfo-maven-plugin</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <configuration>
+              <projectName>${project.artifactId}</projectName>
+            </configuration>
+            <executions>
+              <execution>
+                <id>collectBuildInfo</id>
+                <phase>process-classes</phase>
+                <goals><goal>collect</goal></goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+----
+2. Add servlet in web application to show:
+
+  a. Using web.xml
+
+[source,xml]
+----
+    <servlet>
+      <servlet-name>buildInfo</servlet-name>
+      <servlet-class>simonxianyu.buildinfo.BuildInfoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+      <servlet-name>buildInfo</servlet-name>
+      <url-pattern>/buildInfo</url-pattern>
+    </servlet-mapping>
+----
+
+  b. Add in spring boot web application:
+
+[source,java]
+----
+  @SpringBootApplication
+  public class MyWebApplication extends SpringBootServletInitializer {
+  	@Override
+  	protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
+  		return builder.sources(MyWebApplication.class);
+  	}
+
+  	@Override
+  	public void onStartup(ServletContext servletContext) throws ServletException {
+  		super.onStartup(servletContext);
+  		ServletRegistration.Dynamic registration = servletContext.addServlet("buildInfo", new BuildInfoServlet());
+  		registration.setLoadOnStartup(1);
+  		registration.addMapping("/buildInfo");
+  	}
+
+  }
+----
